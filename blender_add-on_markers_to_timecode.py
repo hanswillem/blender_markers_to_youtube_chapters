@@ -39,8 +39,8 @@ def exportChapters():
     markers = bpy.context.scene.timeline_markers
     FPS = bpy.context.scene.render.fps
 
-    chapterfile = os.path.join(os.path.dirname(bpy.data.filepath), 'chapters.txt')
-    print(os.path.join(os.path.dirname(bpy.data.filepath)))
+    chapterfile = os.path.join(os.path.dirname(bpy.data.filepath), '.'.join((os.path.basename(bpy.data.filepath).split('.')[:-1])) + '_chapters.txt')
+
     
     with open(chapterfile, 'w') as f:
         for i in markers:
@@ -48,7 +48,13 @@ def exportChapters():
             tc = str(tc)
             f.write(tc + ' - ' + i.name)
             f.write('\n')
-
+            
+    #open the folder on LINUX
+    subprocess.Popen(['xdg-open', bpy.path.abspath('//')])
+    #open the folder on OSX
+    #subprocess.Popen(["open", bpy.path.abspath('//')])
+    
+    
 def check():
     r = False
     if bpy.data.is_saved:
