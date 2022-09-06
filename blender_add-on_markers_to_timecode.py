@@ -21,7 +21,7 @@ bl_info = {
     'name' : 'Export Youtube chapters',
     'author' : 'Hans Willem Gijzel',
     'version' : (1, 0),
-    'blender' : (3, 1, 2  ),
+    'blender' : (3, 2, 2),
     'location' : 'Properties > Output > Youtube Chapters',
     'description' : 'Exports Blender markers as Youtube chapters in a .txt file.',
     'warning' : '',
@@ -36,14 +36,20 @@ import os
 import subprocess
 
 def exportChapters():
+
+    def framenum(mrk):
+        return mrk.frame 
+
     markers = bpy.context.scene.timeline_markers
+    sortedMarkers = sorted(markers, key=framenum)
+
     FPS = bpy.context.scene.render.fps
 
     chapterfile = os.path.join(os.path.dirname(bpy.data.filepath), '.'.join((os.path.basename(bpy.data.filepath).split('.')[:-1])) + '_chapters.txt')
 
     
     with open(chapterfile, 'w') as f:
-        for i in markers:
+        for i in sortedMarkers:
             tc = timedelta(seconds=(int(i.frame / FPS)))
             tc = str(tc)
             f.write(tc + ' - ' + i.name)
